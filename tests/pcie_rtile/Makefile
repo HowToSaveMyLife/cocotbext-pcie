@@ -26,7 +26,7 @@ WAVES ?= 0
 COCOTB_HDL_TIMEUNIT = 1ns
 COCOTB_HDL_TIMEPRECISION = 1ps
 
-DUT      = test_pcie_ptile
+DUT      = test_pcie_rtile
 COCOTB_TEST_MODULES = $(DUT)
 COCOTB_TOPLEVEL     = $(DUT)
 MODULE   = $(COCOTB_TEST_MODULES)
@@ -35,13 +35,14 @@ VERILOG_SOURCES  = $(DUT).v
 
 # module parameters
 export PARAM_SEG_COUNT := 1
-export PARAM_SEG_DATA_WIDTH := 128
+export PARAM_SEG_DATA_WIDTH := 256
 export PARAM_SEG_HDR_WIDTH := 128
 export PARAM_SEG_PRFX_WIDTH := 32
-export PARAM_SEG_DATA_PAR_WIDTH := $(shell expr $(PARAM_SEG_DATA_WIDTH) / 8 )
-export PARAM_SEG_HDR_PAR_WIDTH := $(shell expr $(PARAM_SEG_HDR_WIDTH) / 8 )
-export PARAM_SEG_PRFX_PAR_WIDTH := $(shell expr $(PARAM_SEG_PRFX_WIDTH) / 8 )
-export PARAM_SEG_EMPTY_WIDTH := $(shell python -c "print((($(PARAM_SEG_DATA_WIDTH)//32)-1).bit_length())" )
+export PARAM_SEG_DATA_PAR_WIDTH := 8
+export PARAM_SEG_HDR_PAR_WIDTH := 4
+export PARAM_SEG_PRFX_PAR_WIDTH := 1
+export PARAM_SEG_EMPTY_WIDTH := 3
+export PARAM_SEG_BAR_WIDTH := 3
 
 ifeq ($(SIM), icarus)
 	COCOTB_PLUSARGS += -fst

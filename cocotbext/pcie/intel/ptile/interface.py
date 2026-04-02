@@ -27,7 +27,8 @@ import struct
 
 import cocotb
 from cocotb.queue import Queue, QueueFull
-from cocotb.triggers import RisingEdge, Timer, First, Event
+from cocotb.triggers import RisingEdge, Timer, First, Event, ReadWrite
+from cocotb.handle import Immediate
 from cocotb_bus.bus import Bus
 
 from cocotbext.pcie.core.tlp import Tlp
@@ -343,36 +344,36 @@ class PTilePcieSource(PTilePcieBase):
         self.queue_occupancy_limit_bytes = -1
         self.queue_occupancy_limit_frames = -1
 
-        self.bus.data.setimmediatevalue(0)
-        self.bus.sop.setimmediatevalue(0)
-        self.bus.eop.setimmediatevalue(0)
-        self.bus.valid.setimmediatevalue(0)
-        self.bus.hdr.setimmediatevalue(0)
-        self.bus.tlp_prfx.setimmediatevalue(0)
+        self.bus.data.value = 0
+        self.bus.sop.value = 0
+        self.bus.eop.value = 0
+        self.bus.valid.value = 0
+        self.bus.hdr.value = 0
+        self.bus.tlp_prfx.value = 0
 
         if hasattr(self.bus, "empty"):
-            self.bus.empty.setimmediatevalue(0)
+            self.bus.empty.value = 0
 
         if hasattr(self.bus, "err"):
-            self.bus.err.setimmediatevalue(0)
+            self.bus.err.value = 0
         if hasattr(self.bus, "bar_range"):
-            self.bus.bar_range.setimmediatevalue(0)
+            self.bus.bar_range.value = 0
         if hasattr(self.bus, "tlp_abort"):
-            self.bus.tlp_abort.setimmediatevalue(0)
+            self.bus.tlp_abort.value = 0
 
         if hasattr(self.bus, "vf_active"):
-            self.bus.vf_active.setimmediatevalue(0)
+            self.bus.vf_active.value = 0
         if hasattr(self.bus, "func_num"):
-            self.bus.func_num.setimmediatevalue(0)
+            self.bus.func_num.value = 0
         if hasattr(self.bus, "vf_num"):
-            self.bus.vf_num.setimmediatevalue(0)
+            self.bus.vf_num.value = 0
 
         if hasattr(self.bus, "data_par"):
-            self.bus.data_par.setimmediatevalue(0)
+            self.bus.data_par.value = 0
         if hasattr(self.bus, "hdr_par"):
-            self.bus.hdr_par.setimmediatevalue(0)
+            self.bus.hdr_par.value = 0
         if hasattr(self.bus, "tlp_prfx_par"):
-            self.bus.tlp_prfx_par.setimmediatevalue(0)
+            self.bus.tlp_prfx_par.value = 0
 
         cocotb.start_soon(self._run_source())
         cocotb.start_soon(self._run())
@@ -543,7 +544,7 @@ class PTilePcieSink(PTilePcieBase):
         self.queue_occupancy_limit_bytes = -1
         self.queue_occupancy_limit_frames = -1
 
-        self.bus.ready.setimmediatevalue(0)
+        self.bus.ready.value = 0
 
         cocotb.start_soon(self._run_sink())
         cocotb.start_soon(self._run())

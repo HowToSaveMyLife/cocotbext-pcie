@@ -26,6 +26,7 @@ import cocotb
 from cocotb.clock import Clock
 from cocotb.queue import Queue
 from cocotb.triggers import RisingEdge, FallingEdge, Timer, First
+from cocotb.handle import Immediate
 
 from cocotbext.pcie.core import Device, Endpoint, __version__
 from cocotbext.pcie.core.caps import MsiCapability, MsixCapability
@@ -116,7 +117,7 @@ def init_signal(sig, width=None, initval=None):
     if width is not None:
         assert len(sig) == width
     if initval is not None:
-        sig.setimmediatevalue(initval)
+        sig.set(Immediate(initval))
     return sig
 
 
@@ -741,7 +742,7 @@ class PTilePcieDevice(Device):
         # fork coroutines
 
         if self.coreclkout_hip is not None:
-            cocotb.start_soon(Clock(self.coreclkout_hip, int(1e9/self.pld_clk_frequency), units="ns").start())
+            cocotb.start_soon(Clock(self.coreclkout_hip, int(1e9/self.pld_clk_frequency), unit="ns").start())
 
         if self.rx_source is not None:
             cocotb.start_soon(self._run_rx_logic())
