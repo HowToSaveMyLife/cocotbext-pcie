@@ -2,7 +2,7 @@
 """
 
 Copyright (c) 2022-2025 Alex Forencich
-Copyright (c) 2026 OpenAI
+Copyright (c) 2026 Haru
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -1042,9 +1042,9 @@ def test_pcie_rtile(request, data_width):
     parameters["SEG_DATA_WIDTH"] = data_width // parameters["SEG_COUNT"]
     parameters["SEG_HDR_WIDTH"] = 128
     parameters["SEG_PRFX_WIDTH"] = 32
-    parameters["SEG_DATA_PAR_WIDTH"] = parameters["SEG_DATA_WIDTH"] // 8
-    parameters["SEG_HDR_PAR_WIDTH"] = parameters["SEG_HDR_WIDTH"] // 8
-    parameters["SEG_PRFX_PAR_WIDTH"] = parameters["SEG_PRFX_WIDTH"] // 8
+    parameters["SEG_DATA_PAR_WIDTH"] = parameters["SEG_DATA_WIDTH"] // 32
+    parameters["SEG_HDR_PAR_WIDTH"] = parameters["SEG_HDR_WIDTH"] // 32
+    parameters["SEG_PRFX_PAR_WIDTH"] = parameters["SEG_PRFX_WIDTH"] // 32
     parameters["SEG_EMPTY_WIDTH"] = ((parameters["SEG_DATA_WIDTH"] // 32) - 1).bit_length()
     parameters["SEG_BAR_WIDTH"] = 3
 

@@ -30,6 +30,7 @@ from cocotb.queue import Queue, QueueFull
 from cocotb.triggers import RisingEdge, Timer, First, Event
 from cocotb.types import Logic, LogicArray
 from cocotb_bus.bus import Bus
+from cocotb.handle import Immediate
 
 from cocotbext.pcie.core.tlp import Tlp
 
@@ -403,38 +404,38 @@ class RTilePcieSource(RTilePcieBase):
         self.queue_occupancy_limit_bytes = -1
         self.queue_occupancy_limit_frames = -1
 
-        self.bus.data.value = 0
-        self.bus.sop.value = 0
-        self.bus.eop.value = 0
+        self.bus.data.value = Immediate(0)
+        self.bus.sop.value = Immediate(0)
+        self.bus.eop.value = Immediate(0)
         # self.bus.pvalid.setimmediatevalue(0)
-        self.bus.hvalid.value = 0
-        self.bus.dvalid.value = 0
-        self.bus.hdr.value = 0
+        self.bus.hvalid.value = Immediate(0)
+        self.bus.dvalid.value = Immediate(0)
+        self.bus.hdr.value = Immediate(0)
         # self.bus.tlp_prfx.setimmediatevalue(0)
 
         if hasattr(self.bus, "empty"):
-            self.bus.empty.value = 0
+            self.bus.empty.value = Immediate(0)
 
         if hasattr(self.bus, "err"):
-            self.bus.err.value = 0
+            self.bus.err.value = Immediate(0)
         if hasattr(self.bus, "bar"):
-            self.bus.bar.value = 0
+            self.bus.bar.value = Immediate(0)
         # if hasattr(self.bus, "tlp_abort"):
         #     self.bus.tlp_abort.setimmediatevalue(0)
 
         if hasattr(self.bus, "vfactive"):
-            self.bus.vfactive.value = 0
+            self.bus.vfactive.value = Immediate(0)
         if hasattr(self.bus, "pfnum"):
-            self.bus.pfnum.value = 0
+            self.bus.pfnum.value = Immediate(0)
         if hasattr(self.bus, "vfnum"):
-            self.bus.vfnum.value = 0
+            self.bus.vfnum.value = Immediate(0)
 
         if hasattr(self.bus, "data_par"):
-            self.bus.data_par.value = 0
+            self.bus.data_par.value = Immediate(0)
         if hasattr(self.bus, "hdr_par"):
-            self.bus.hdr_par.value = 0
+            self.bus.hdr_par.value = Immediate(0)
         if hasattr(self.bus, "prefix_par"):
-            self.bus.prefix_par.value = 0
+            self.bus.prefix_par.value = Immediate(0)
 
         cocotb.start_soon(self._run_source())
         cocotb.start_soon(self._run())
@@ -717,7 +718,7 @@ class RTilePcieSink(RTilePcieBase):
                     # frame.tlp_prfx = (sample.tlp_prfx >> (seg*32)) & 0xffffffff
                     # frame.tlp_prfx_par = (sample.tlp_prfx_par >> (seg*4)) & 0xf
                     frame.hdr = (sample.hdr >> (seg*128)) & (2**128-1)
-                    frame.hdr_par = (sample.hdr_par >> (seg*4)) & 0xffff
+                    frame.hdr_par = (sample.hdr_par >> (seg*4)) & 0xf
                     if frame.hdr & (1 << 126):
                         dword_count = (frame.hdr >> 96) & 0x3ff
                         if dword_count == 0:
@@ -744,7 +745,7 @@ class RTilePcieSink(RTilePcieBase):
                         seg*self.seg_par_width)) & self.seg_par_mask
                     for k in range(min(self.seg_byte_lanes, dword_count)):
                         frame.data.append((data >> 32*k) & 0xffffffff)
-                        frame.parity.append((data_par >> k) & 0xf)
+                        frame.parity.append((data_par >> k) & 0x1)
                         dword_count -= 1
 
                 if sample.eop & (1 << seg):
