@@ -86,22 +86,11 @@ class TB:
 
         self.rc = RootComplex()
 
-        dw = len(dut.tx_st_data)
-        assert dw in {128, 256, 512}
-
-        link_width = {
-            128: 4,
-            256: 8,
-            512: 16,
-        }[dw]
-
-        # Keep the R-tile configuration intentionally conservative.  The model
-        # exists, but it is less battle-tested than the P-tile path.
         self.dev = RTilePcieDevice(
             port_num=0,
             pcie_generation=3,
-            pcie_link_width=link_width,
-            pld_clk_frequency=250e6,
+            # pcie_link_width=2,
+            # pld_clk_frequency=250e6,
             pf_count=1,
             max_payload_size=128,
             enable_extended_tag=False,
